@@ -5,7 +5,7 @@ import { GraphContext } from './Store/GraphContext';
 const Node = forwardRef((props, ref) => {
     const {graph, setGraph, depart, setDepart, arrivee, setArrivee, refs} = useContext(GraphContext);
     const [coord, setCoord] = useState({x: props.x, y: props.y});
-    const [colorBg, setColorBg] = useState("white");
+    const [colorBg, setColorBg] = useState(props.color);
     const [isWall, setIsWall] = useState(false);
     const [cout, setCout] = useState(0);
     const [heuristique, setHeuristique] = useState(0)
@@ -13,13 +13,17 @@ const Node = forwardRef((props, ref) => {
     const {x, y} = coord;
 
     //console.log("test : " + graph[0][0].props.x)
+    useEffect(() => {
+        if (refs.current === [])
+            setColor("white")
+    }, [refs])
 
     const setColor = (color) => {
         if (colorBg !== "blue")
             setColorBg(color)
     }
 
-    const setDepartArrivee = () => {
+    const setDepartArrivee = (e) => {
         console.log("coord : " + refs.current[x][y].coord)
         refs.current[x][y].setColor("red")
         console.log("depart", depart)
@@ -32,18 +36,32 @@ const Node = forwardRef((props, ref) => {
         else if (Object.keys(arrivee).length === 0)
         {
             setArrivee({x: x, y:y});
-            setColorBg("black");
+            setColorBg("yellow");
             console.log("set Arrivee");
         }
+        else {
+            setIsWall(true)
+            setColorBg("black");
+        }
     }
+
+    useEffect(() => {
+        console.log("wall changed", isWall, coord)
+    }, [isWall])
 
     useImperativeHandle(ref, () => ({
 
         coord,
 
         setColor,
+        
+        resetColor: () => {
+            setColorBg("white");
+        },
 
-        isWall,
+        isWalle: () => {
+            return isWall;
+        },
 
         setHeur: (heuristique) => {
             setHeuristique(heuristique);
@@ -60,7 +78,7 @@ const Node = forwardRef((props, ref) => {
     }));
 
     return (
-        <td onClick={() => setDepartArrivee()} style={{ border: "1px solid #333", width: "30px", height: "30px", backgroundColor: colorBg}}>
+        <td onClick={(e) => setDepartArrivee(e)} style={{ border: "1px solid #333", width: "30px", height: "30px", backgroundColor: colorBg}}>
             {cout}
         </td>
     );

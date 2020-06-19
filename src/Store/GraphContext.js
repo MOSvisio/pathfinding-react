@@ -8,7 +8,8 @@ const contextInit = {
     depart: {},
     setDepart: () => {},
     arrivee: {},
-    setArrivee: () => {}
+    setArrivee: () => {},
+    reset: () => {}
 };
 
 export const GraphContext = createContext(
@@ -24,7 +25,13 @@ const GraphProvider = (props) => {
             let line = []
             let yMax = 0;
             for (yMax; yMax < 10; yMax++ ) {
-                line.push({NodeObject:Node, parent: null, cout: 0, heuristique: 0})
+                const nodeObject = {
+                    NodeObject:Node, 
+                    parent: null, 
+                    cout: 0, 
+                    heuristique: 0
+                };
+                line.push(nodeObject)
             }
             graphTmp.push(line);
         }
@@ -32,11 +39,28 @@ const GraphProvider = (props) => {
 
     }
 
-    const refs = useRef([]);
+    const [refs, setRefs] = useState(useRef([]));
     const [graph, setGraph] = useState(initGraph);
     // soit Node si je peux this dans le depart soit un objet {x, y}
     const [depart, setDepart] = useState({});
     const [arrivee, setArrivee] = useState({});
+
+    const reset = () => {
+        
+        
+        for (const line of refs.current)
+            for(const ref of line) {
+                if (ref) {
+                    ref.resetColor()
+                    ref.setCout(0)
+                }
+            }
+
+        refs.current = []
+        setGraph(initGraph);
+        setDepart({});
+        setArrivee({});
+    }
 
     const contextValue = {
         graph: graph,
@@ -45,7 +69,8 @@ const GraphProvider = (props) => {
         depart: depart,
         setDepart: (e) => setDepart(e),
         arrivee: arrivee,
-        setArrivee: (e) => setArrivee(e)
+        setArrivee: (e) => setArrivee(e),
+        reset: () => reset()
     };
 
     return (

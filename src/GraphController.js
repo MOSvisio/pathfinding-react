@@ -3,7 +3,7 @@ import { GraphContext } from './Store/GraphContext';
 import Node from './Node';
 
 const GraphController = (props) => {
-    const {graph, setGraph, depart, setDepart, arrivee, setArrivee, refs} = useContext(GraphContext);
+    const {graph, setGraph, depart, setDepart, arrivee, setArrivee, refs, reset} = useContext(GraphContext);
 
     useEffect(() => {
         console.log("changed graph", graph);
@@ -39,41 +39,41 @@ const GraphController = (props) => {
     }
 
     const distanceBetweenNode = (node1, node2) => {
-        const d1 = Math.abs(Math.pow(parseInt(node2.coord.x) - parseInt(node1.coord.x),2));
-        const d2 = Math.abs(Math.pow(parseInt(node2.coord.x) - parseInt(node1.coord.y),2));
-        console.log("distance", Math.sqrt(d1 + d2))
-        return Math.floor(Math.sqrt(d1 + d2));
+        const d1 = Math.abs(parseInt(node2.coord.x) - parseInt(node1.coord.x));
+        const d2 = Math.abs(parseInt(node2.coord.x) - parseInt(node1.coord.y));
+        return Math.floor(d1 + d2);
     }
 
     // refactor
     const getNeighboorRef = (x, y) => {
         let neighboor = [];
         //top
-        if (refs.current[x-1] && refs.current[x-1][y] && !refs.current[x-1][y].isWall) {
+        if ((refs.current[x-1] && refs.current[x-1][y])) {
             neighboor.push(refs.current[x-1][y]);
         }
         //bottom
-        if (refs.current[x+1] && refs.current[x+1][y] && !refs.current[x+1][y].isWall) {
+        if ((refs.current[x+1] && refs.current[x+1][y])) {
             neighboor.push(refs.current[x+1][y]);
         }
         //left
-        if (refs.current[x][y-1] && refs.current[x][y-1] && !refs.current[x][y-1].isWall) {
+        if ((refs.current[x] && refs.current[x][y-1])) {
             neighboor.push(refs.current[x][y-1]);
         }
         //right
-        if (refs.current[x][y+1] && refs.current[x][y+1] && !refs.current[x][y+1].isWall) {
+        if ((refs.current[x] && refs.current[x][y+1])) {
             neighboor.push(refs.current[x][y+1]);
         }
         return neighboor;
     }
 
+    // TODO : replace for by find
     const existWithLowerCost = (v, tab) => {
         if (tab.includes(v)) {
-            for (const value in tab) {
-                if (value === v) {
+            for (const value of tab) {
+                if (value.coord === v.coord) {
                     if (getObjectOfRef(value).cout < getObjectOfRef(v).cout)
                         return true;
-                    else return false;
+                    return false;
                 }
             }
         }
@@ -86,19 +86,16 @@ const GraphController = (props) => {
         }
     }
 
-    const  aStar = () => {
+    const aStarWiki = async () => {
         let closedList = [];
         let openList = [];
-        const departRef = refs.current[depart.x][depart.y]
-        const arriveeRef = refs.current[arrivee.x][arrivee.y]
-        openList.push(departRef)
-        
-        while (openList.length > 0) {
-            openList.sort(compared2Nodes)
-            const current = openList.shift();
-            closedList.push(current);
+        const departRef = refs.current[depart.x][depart.y];
+        const arriveeRef = refs.current[arrivee.x][arrivee.y];
+        openList.push(departRef);
 
-            if (current.coord.x === arriveeRef.coord.x && current.coord.y === arriveeRef.coord.y) {
+        while (openList.length > 0) {
+            const current = openList.shift();
+            if (current.coord.x == arriveeRef.coord.x && current.coord.y == arriveeRef.coord.y) {
                 var curr = current;
                 var ret = []
 
@@ -110,39 +107,23 @@ const GraphController = (props) => {
                 showPath(ret.reverse());
                 return;
             }
-            
-            closedList.push(current);
+            for (let v of getNeighboorRef(current.coord.x, current.coord.y)) {
 
-            for (const neighboor of getNeighboorRef(current.coord.x, current.coord.y)) {
-
-                if (closedList.includes(neighboor) || existWithLowerCost(neighboor, openList)) {
+                if ((closedList.includes(v) || existWithLowerCost(v, openList) || v.isWall)) {
                     continue;
-                }
-
-                let gScore = parseInt(getObjectOfRef(current).cout) + 1;
-                let gScoreIsBest = false;
-
-                if (!openList.includes(neighboor)) {
-                    gScoreIsBest = true;
-                    getObjectOfRef(neighboor).heuristique = distanceBetweenNode(neighboor, arriveeRef);
-                    neighboor.setHeur(distanceBetweenNode(neighboor, arriveeRef))
-                    openList.push(neighboor);
-                }
-                else if (gScore < getObjectOfRef(neighboor).cout) {
-                    gScoreIsBest = true;
-                }
-
-                if (gScoreIsBest) {
-                    getObjectOfRef(neighboor).parent = current;
-                    getObjectOfRef(neighboor).cout = gScore;
-                    neighboor.setCout(gScore)
+                }    
+                else {
+                    getObjectOfRef(v).cout = getObjectOfRef(current).cout + 1;
+                    v.setCout(getObjectOfRef(current).cout + 1)
+                    getObjectOfRef(v).heuristique = getObjectOfRef(v).cout + distanceBetweenNode(v, arriveeRef);
+                    getObjectOfRef(v).parent = current;
+                    openList.push(v);
                 }
             }
+            if (!current.isWalle())
+                closedList.push(current);
         }
-
-        return []
-
-
+        return [];
     }
 
     return (
@@ -155,7 +136,7 @@ const GraphController = (props) => {
                         let x = index
                         let lineRef = []
                         let row = rows.map((Component, index, key) => {
-                            return <Component.NodeObject ref={el => lineRef.push(el)} x={x} y={index} key={x + ':' + index} />
+                            return <Component.NodeObject color="white" ref={el => lineRef.push(el)} x={x} y={index} key={x + ':' + index} />
                         })
                         refs.current.push(lineRef)
                         return <tr className="row" key={index}>{row}</tr>
@@ -164,7 +145,8 @@ const GraphController = (props) => {
                 }
                 </tbody>
             </table>
-            <button onClick={() => aStar()}>Resolve</button>
+            <button onClick={() => aStarWiki()}>Resolve</button>
+            <button onClick={() => reset()}>Reset</button>
         </div>
     );
 }
