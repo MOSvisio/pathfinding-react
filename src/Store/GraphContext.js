@@ -1,9 +1,10 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useState, useRef } from 'react';
 import Node from '../Node';
 
 const contextInit = {
     graph: [],
     setGraph: () => {},
+    refs: null,
     depart: {},
     setDepart: () => {},
     arrivee: {},
@@ -23,13 +24,15 @@ const GraphProvider = (props) => {
             let line = []
             let yMax = 0;
             for (yMax; yMax < 10; yMax++ ) {
-                line.push(<Node x={xMax} y={yMax} key={xMax + ':' + yMax} />);
+                line.push({NodeObject:Node, parent: null, cout: 0, heuristique: 0})
             }
             graphTmp.push(line);
         }
         return graphTmp;
+
     }
 
+    const refs = useRef([]);
     const [graph, setGraph] = useState(initGraph);
     // soit Node si je peux this dans le depart soit un objet {x, y}
     const [depart, setDepart] = useState({});
@@ -38,6 +41,7 @@ const GraphProvider = (props) => {
     const contextValue = {
         graph: graph,
         setGraph: (e) => setGraph(e),
+        refs: refs,
         depart: depart,
         setDepart: (e) => setDepart(e),
         arrivee: arrivee,

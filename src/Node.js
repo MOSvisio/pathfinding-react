@@ -1,36 +1,69 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect, forwardRef, useImperativeHandle } from 'react';
 import { GraphContext } from './Store/GraphContext';
 
 
-const Node = (props) => {
-    const {graph, setGraph, depart, setDepart, arrivee, setArrivee} = useContext(GraphContext);
+const Node = forwardRef((props, ref) => {
+    const {graph, setGraph, depart, setDepart, arrivee, setArrivee, refs} = useContext(GraphContext);
     const [coord, setCoord] = useState({x: props.x, y: props.y});
-    const [colorBg, setColorBg] = useState("white")
+    const [colorBg, setColorBg] = useState("white");
+    const [isWall, setIsWall] = useState(false);
+    const [cout, setCout] = useState(0);
+    const [heuristique, setHeuristique] = useState(0)
 
     const {x, y} = coord;
 
     //console.log("test : " + graph[0][0].props.x)
 
+    const setColor = (color) => {
+        if (colorBg !== "blue")
+            setColorBg(color)
+    }
+
     const setDepartArrivee = () => {
-        console.log("enter : " + graph[x][y].props.x)
+        console.log("coord : " + refs.current[x][y].coord)
+        refs.current[x][y].setColor("red")
         console.log("depart", depart)
         if (Object.keys(depart).length === 0)
         {
             setDepart({x: x, y:y});
+            setColorBg("blue")
             console.log("set Depart");
         }
         else if (Object.keys(arrivee).length === 0)
         {
             setArrivee({x: x, y:y});
+            setColorBg("black");
             console.log("set Arrivee");
         }
     }
 
+    useImperativeHandle(ref, () => ({
+
+        coord,
+
+        setColor,
+
+        isWall,
+
+        setHeur: (heuristique) => {
+            setHeuristique(heuristique);
+        },
+
+        heuristique,
+
+        cout, 
+
+        setCout: (cout) => {
+            setCout(cout);
+        }
+    
+    }));
+
     return (
         <td onClick={() => setDepartArrivee()} style={{ border: "1px solid #333", width: "30px", height: "30px", backgroundColor: colorBg}}>
-            {coord.x} : {coord.y}
+            {cout}
         </td>
     );
-}
+})
 
 export default Node;
