@@ -39,9 +39,9 @@ const GraphProvider = (props) => {
 
     const initGraph = () => {
         let graphTmp = [];
-        for (let xMax = 0; xMax < 10; xMax++ ) {
+        for (let xMax = 0; xMax < 20; xMax++ ) {
             let line = []
-            for (let yMax = 0; yMax < 10; yMax++ ) {
+            for (let yMax = 0; yMax < 20; yMax++ ) {
                 const nodeObject = new NodeObject(Node, null, 0, {x: xMax, y: yMax}, 0, false);
                 line.push(nodeObject)
             }

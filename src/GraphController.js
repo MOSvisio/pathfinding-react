@@ -28,12 +28,12 @@ const GraphController = () => {
 
     const compared2Nodes = (node1, node2) => {
         if (node1.heuristique < node2.heuristique ) {
-            return 1;
+            return -1;
         }
         else if (node1.heuristique === node2.heuristique) {
             return 0;
         }
-        else return -1;
+        else return 1;
     }
 
     const distanceBetweenNode = (node1, node2) => {
@@ -124,6 +124,7 @@ const GraphController = () => {
                     v.heuristique = v.cout + distanceBetweenNode(v, arriveeRef);
                     v.parent = current;
                     openList.push(v);
+                    openList.sort(compared2Nodes)
                 }
             });
             closedList.push(current);
