@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect} from 'react';
+import React, { useContext } from 'react';
 import { GraphContext } from './Store/GraphContext';
 
 const GraphController = () => {
@@ -66,14 +66,10 @@ const GraphController = () => {
 
     // TODO : replace for by find
     const existWithLowerCost = (v, tab) => {
-        if (tab.includes(v)) {
-            for (const value of tab) {
-                if (value.coord === v.coord) {
-                    if (value.cout < v.cout)
-                        return true;
-                    return false;
-                }
-            }
+        for (const value of tab) {
+            if (value.cout <= v.cout)
+                return true;
+            return false;   
         }
         return false;
     }
@@ -89,6 +85,18 @@ const GraphController = () => {
         }
     }
 
+    const calculatePath = (current) => {
+        let curr = current;
+        let ret = []
+
+        while (curr.parent) {
+            ret.push(curr);
+            curr = curr.parent;
+        }
+
+        showPath(ret.reverse());
+    }
+
     const aStarWiki = () => {
         let closedList = [];
         let openList = [];
@@ -99,15 +107,7 @@ const GraphController = () => {
         while (openList.length > 0) {
             const current = openList.shift();
             if (current.coord.x == arriveeRef.coord.x && current.coord.y == arriveeRef.coord.y) {
-                let curr = current;
-                let ret = []
-
-                while (curr.parent) {
-                    ret.push(curr);
-                    curr = curr.parent;
-                }
-
-                showPath(ret.reverse());
+                calculatePath(current)
                 return;
             }
 
@@ -138,7 +138,7 @@ const GraphController = () => {
                     graph.map((rows, index) => {
                         let x = index
                         let lineRef = []
-                        let row = rows.map((Component, index, key) => {
+                        let row = rows.map((Component, index) => {
                             return <Component.NodeObject color="white" ref={el => lineRef.push(el)} x={x} y={index} key={x + ':' + index} />
                         })
                         refs.current.push(lineRef)
