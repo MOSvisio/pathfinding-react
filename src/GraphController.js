@@ -27,7 +27,7 @@ const GraphController = () => {
     }*/
 
     const compared2Nodes = (node1, node2) => {
-        if (node1.heuristique < node1.heuristique ) {
+        if (node1.heuristique < node2.heuristique ) {
             return 1;
         }
         else if (node1.heuristique === node2.heuristique) {
@@ -66,10 +66,12 @@ const GraphController = () => {
 
     // TODO : replace for by find
     const existWithLowerCost = (v, tab) => {
-        for (const value of tab) {
-            if (value.cout <= v.cout)
-                return true;
-            return false;   
+        if (tab.includes(v)) {
+            for (const value of tab) {
+                if (value.cout <= v.cout)
+                    return true;
+                return false;
+            }
         }
         return false;
     }
@@ -97,22 +99,23 @@ const GraphController = () => {
         showPath(ret.reverse());
     }
 
+
+    // TODO: The sort didn't work openlist is a priority queue ? 
     const aStarWiki = () => {
         let closedList = [];
         let openList = [];
         const departRef = graph[depart.x][depart.y];
         const arriveeRef = graph[arrivee.x][arrivee.y];
         openList.push(departRef);
-
         while (openList.length > 0) {
             const current = openList.shift();
-            if (current.coord.x == arriveeRef.coord.x && current.coord.y == arriveeRef.coord.y) {
+            if (current.coord.x === arriveeRef.coord.x && current.coord.y === arriveeRef.coord.y) {
                 calculatePath(current)
                 return;
             }
 
             getNeighboorRef(current.coord.x, current.coord.y).forEach((v) => {
-                if ((closedList.includes(v) || existWithLowerCost(v, openList) || v.isWall)) {
+                if (closedList.includes(v) || existWithLowerCost(v, openList) || v.isWall) {
                     return;
                 }    
                 else {
@@ -121,7 +124,6 @@ const GraphController = () => {
                     v.heuristique = v.cout + distanceBetweenNode(v, arriveeRef);
                     v.parent = current;
                     openList.push(v);
-                    openList.sort(compared2Nodes)
                 }
             });
             closedList.push(current);
