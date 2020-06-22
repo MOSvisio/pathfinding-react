@@ -18,7 +18,24 @@ export const GraphContext = createContext(
 
 const GraphProvider = (props) => {
 
-    
+    class NodeObject {
+        NodeObject;
+        parent;
+        cout;
+        coord;
+        heuristique;
+        isWall;
+
+        constructor(NodeObject, parent, cout, coord, heuristique, isWall)
+        {
+            this.NodeObject = NodeObject;
+            this.parent = parent;
+            this.cout = cout;
+            this.coord = coord;
+            this.heuristique = heuristique;
+            this.isWall = isWall;
+        }
+    }
 
     const initGraph = () => {
         let graphTmp = [];
@@ -27,14 +44,7 @@ const GraphProvider = (props) => {
             let line = []
             let yMax = 0;
             for (yMax; yMax < 10; yMax++ ) {
-                const nodeObject = {
-                    NodeObject:Node, 
-                    parent: null, 
-                    cout: 0, 
-                    coord: {x: xMax, y: yMax},
-                    heuristique: 0,
-                    isWall: false
-                };
+                const nodeObject = new NodeObject(Node, null, 0, {x: xMax, y: yMax}, 0, false);
                 line.push(nodeObject)
             }
             graphTmp.push(line);
@@ -45,13 +55,10 @@ const GraphProvider = (props) => {
 
     const [refs, setRefs] = useState(useRef([]));
     const [graph, setGraph] = useState(initGraph);
-    // soit Node si je peux this dans le depart soit un objet {x, y}
     const [depart, setDepart] = useState({});
     const [arrivee, setArrivee] = useState({});
 
     const reset = () => {
-        
-        
         for (const line of refs.current)
             for(const ref of line) {
                 if (ref) {
