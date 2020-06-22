@@ -41,6 +41,7 @@ const Node = forwardRef((props, ref) => {
         }
         else {
             setIsWall(true)
+            graph[coord.x][coord.y].isWall = true
             setColorBg("black");
         }
     }

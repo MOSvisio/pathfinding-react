@@ -18,6 +18,8 @@ export const GraphContext = createContext(
 
 const GraphProvider = (props) => {
 
+    
+
     const initGraph = () => {
         let graphTmp = [];
         let xMax = 0;
@@ -29,7 +31,9 @@ const GraphProvider = (props) => {
                     NodeObject:Node, 
                     parent: null, 
                     cout: 0, 
-                    heuristique: 0
+                    coord: {x: xMax, y: yMax},
+                    heuristique: 0,
+                    isWall: false
                 };
                 line.push(nodeObject)
             }

@@ -48,20 +48,20 @@ const GraphController = (props) => {
     const getNeighboorRef = (x, y) => {
         let neighboor = [];
         //top
-        if ((refs.current[x-1] && refs.current[x-1][y])) {
-            neighboor.push(refs.current[x-1][y]);
+        if ((graph[x-1] && graph[x-1][y])) {
+            neighboor.push(graph[x-1][y]);
         }
         //bottom
-        if ((refs.current[x+1] && refs.current[x+1][y])) {
-            neighboor.push(refs.current[x+1][y]);
+        if ((graph[x+1] && graph[x+1][y])) {
+            neighboor.push(graph[x+1][y]);
         }
         //left
-        if ((refs.current[x] && refs.current[x][y-1])) {
-            neighboor.push(refs.current[x][y-1]);
+        if ((graph[x] && graph[x][y-1])) {
+            neighboor.push(graph[x][y-1]);
         }
         //right
-        if ((refs.current[x] && refs.current[x][y+1])) {
-            neighboor.push(refs.current[x][y+1]);
+        if ((graph[x] && graph[x][y+1])) {
+            neighboor.push(graph[x][y+1]);
         }
         return neighboor;
     }
@@ -80,17 +80,22 @@ const GraphController = (props) => {
         return false;
     }
 
-    const showPath = (tab) => {
+    const sleep = (ms) => {
+        return new Promise(resolve => setTimeout(resolve, ms))
+    }
+
+    const showPath = async (tab) => {
         for (const ref of tab) {
-            ref.setColor("green");
+            await sleep(200)
+            refs.current[ref.coord.x][ref.coord.y].setColor("green");
         }
     }
 
     const aStarWiki = async () => {
         let closedList = [];
         let openList = [];
-        const departRef = refs.current[depart.x][depart.y];
-        const arriveeRef = refs.current[arrivee.x][arrivee.y];
+        const departRef = graph[depart.x][depart.y];
+        const arriveeRef = graph[arrivee.x][arrivee.y];
         openList.push(departRef);
 
         while (openList.length > 0) {
@@ -114,14 +119,13 @@ const GraphController = (props) => {
                 }    
                 else {
                     getObjectOfRef(v).cout = getObjectOfRef(current).cout + 1;
-                    v.setCout(getObjectOfRef(current).cout + 1)
+                    refs.current[v.coord.x][v.coord.y].setCout(getObjectOfRef(current).cout + 1)
                     getObjectOfRef(v).heuristique = getObjectOfRef(v).cout + distanceBetweenNode(v, arriveeRef);
                     getObjectOfRef(v).parent = current;
                     openList.push(v);
                 }
             }
-            if (!current.isWalle())
-                closedList.push(current);
+            closedList.push(current);
         }
         return [];
     }
