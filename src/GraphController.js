@@ -37,8 +37,8 @@ const GraphController = () => {
     }
 
     const distanceBetweenNode = (node1, node2) => {
-        const d1 = Math.abs(parseInt(node2.coord.x) - parseInt(node1.coord.x));
-        const d2 = Math.abs(parseInt(node2.coord.x) - parseInt(node1.coord.y));
+        const d1 = Math.abs(parseInt(node1.coord.x) - parseInt(node2.coord.x));
+        const d2 = Math.abs(parseInt(node1.coord.x) - parseInt(node2.coord.y));
         return Math.floor(d1 + d2);
     }
 

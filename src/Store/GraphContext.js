@@ -39,11 +39,9 @@ const GraphProvider = (props) => {
 
     const initGraph = () => {
         let graphTmp = [];
-        let xMax = 0;
-        for (xMax; xMax < 10; xMax++ ) {
+        for (let xMax = 0; xMax < 10; xMax++ ) {
             let line = []
-            let yMax = 0;
-            for (yMax; yMax < 10; yMax++ ) {
+            for (let yMax = 0; yMax < 10; yMax++ ) {
                 const nodeObject = new NodeObject(Node, null, 0, {x: xMax, y: yMax}, 0, false);
                 line.push(nodeObject)
             }
@@ -59,13 +57,15 @@ const GraphProvider = (props) => {
     const [arrivee, setArrivee] = useState({});
 
     const reset = () => {
-        for (const line of refs.current)
+        for (const line of refs.current) {
             for(const ref of line) {
                 if (ref) {
                     ref.resetColor()
                     ref.setCout(0)
+                    ref.setIsWall(false)
                 }
             }
+        }
 
         refs.current = []
         setGraph(initGraph);

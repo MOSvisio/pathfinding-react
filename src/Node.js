@@ -53,6 +53,10 @@ const Node = forwardRef((props, ref) => {
             setColorBg("white");
         },
 
+        setIsWall: (isWall) => {
+            setIsWall(isWall);
+        },
+
         setCout: (cout) => {
             setCout(cout);
         }
@@ -61,7 +65,7 @@ const Node = forwardRef((props, ref) => {
 
     return (
         <td onClick={(e) => setDepartArrivee(e)} style={{ border: "1px solid #333", width: "30px", height: "30px", backgroundColor: colorBg}}>
-            {cout}
+            {isWall ? "" : cout}
         </td>
     );
 })
