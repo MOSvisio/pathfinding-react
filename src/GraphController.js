@@ -1,10 +1,10 @@
 import React, { useState, useContext, useEffect} from 'react';
 import { GraphContext } from './Store/GraphContext';
-import Node from './Node';
 
-const GraphController = (props) => {
-    const {graph, setGraph, depart, setDepart, arrivee, setArrivee, refs, reset} = useContext(GraphContext);
+const GraphController = () => {
+    const {graph, depart, arrivee, refs, reset} = useContext(GraphContext);
 
+    /*
     useEffect(() => {
         console.log("changed graph", graph);
     }, [graph]);
@@ -19,20 +19,18 @@ const GraphController = (props) => {
 
     useEffect(() => {
         console.log("refs modifié", refs)
-    }, [refs]);
+    }, [refs]); 
 
 
     const getObjectOfRef = (ref) => {
         return graph[ref.coord.x][ref.coord.y];
-    }
+    }*/
 
     const compared2Nodes = (node1, node2) => {
-        const node1Info = getObjectOfRef(node1)
-        const node2Info = getObjectOfRef(node2)
-        if (node1Info.heuristique < node2Info.heuristique ) {
+        if (node1.heuristique < node1.heuristique ) {
             return 1;
         }
-        else if (node1Info.heuristique === node2Info.heuristique) {
+        else if (node1.heuristique === node2.heuristique) {
             return 0;
         }
         else return -1;
@@ -71,7 +69,7 @@ const GraphController = (props) => {
         if (tab.includes(v)) {
             for (const value of tab) {
                 if (value.coord === v.coord) {
-                    if (getObjectOfRef(value).cout < getObjectOfRef(v).cout)
+                    if (value.cout < v.cout)
                         return true;
                     return false;
                 }
@@ -91,7 +89,7 @@ const GraphController = (props) => {
         }
     }
 
-    const aStarWiki = async () => {
+    const aStarWiki = () => {
         let closedList = [];
         let openList = [];
         const departRef = graph[depart.x][depart.y];
@@ -101,30 +99,31 @@ const GraphController = (props) => {
         while (openList.length > 0) {
             const current = openList.shift();
             if (current.coord.x == arriveeRef.coord.x && current.coord.y == arriveeRef.coord.y) {
-                var curr = current;
-                var ret = []
+                let curr = current;
+                let ret = []
 
-                while (getObjectOfRef(curr).parent) {
+                while (curr.parent) {
                     ret.push(curr);
-                    curr = getObjectOfRef(curr).parent;
+                    curr = curr.parent;
                 }
 
                 showPath(ret.reverse());
                 return;
             }
-            for (let v of getNeighboorRef(current.coord.x, current.coord.y)) {
 
+            getNeighboorRef(current.coord.x, current.coord.y).forEach((v) => {
                 if ((closedList.includes(v) || existWithLowerCost(v, openList) || v.isWall)) {
-                    continue;
+                    return;
                 }    
                 else {
-                    getObjectOfRef(v).cout = getObjectOfRef(current).cout + 1;
-                    refs.current[v.coord.x][v.coord.y].setCout(getObjectOfRef(current).cout + 1)
-                    getObjectOfRef(v).heuristique = getObjectOfRef(v).cout + distanceBetweenNode(v, arriveeRef);
-                    getObjectOfRef(v).parent = current;
+                    v.cout = current.cout + 1;
+                    refs.current[v.coord.x][v.coord.y].setCout(current.cout + 1)
+                    v.heuristique = v.cout + distanceBetweenNode(v, arriveeRef);
+                    v.parent = current;
                     openList.push(v);
+                    openList.sort(compared2Nodes)
                 }
-            }
+            });
             closedList.push(current);
         }
         return [];
@@ -149,7 +148,7 @@ const GraphController = (props) => {
                 }
                 </tbody>
             </table>
-            <button onClick={() => aStarWiki()}>Resolve</button>
+            <button onClick= {() => aStarWiki()}>Resolve</button>
             <button onClick={() => reset()}>Reset</button>
         </div>
     );

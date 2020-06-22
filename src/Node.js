@@ -12,11 +12,10 @@ const Node = forwardRef((props, ref) => {
 
     const {x, y} = coord;
 
-    //console.log("test : " + graph[0][0].props.x)
-    useEffect(() => {
+    /*useEffect(() => {
         if (refs.current === [])
             setColor("white")
-    }, [refs])
+    }, [refs])*/
 
     const setColor = (color) => {
         if (colorBg !== "blue")
@@ -46,31 +45,13 @@ const Node = forwardRef((props, ref) => {
         }
     }
 
-    useEffect(() => {
-        console.log("wall changed", isWall, coord)
-    }, [isWall])
-
     useImperativeHandle(ref, () => ({
-
-        coord,
 
         setColor,
         
         resetColor: () => {
             setColorBg("white");
         },
-
-        isWalle: () => {
-            return isWall;
-        },
-
-        setHeur: (heuristique) => {
-            setHeuristique(heuristique);
-        },
-
-        heuristique,
-
-        cout, 
 
         setCout: (cout) => {
             setCout(cout);
