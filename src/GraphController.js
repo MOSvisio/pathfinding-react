@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
-import { GraphContext, Block } from './Store/GraphContext';
+import { GraphContext } from './Store/GraphContext';
+import { Block } from './Class/Class';
 
 const GraphController = () => {
     const {graph, depart, arrivee, refs, reset, block, setBlock} = useContext(GraphContext);

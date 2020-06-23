@@ -1,5 +1,6 @@
 import React, { createContext, useState, useRef } from 'react';
 import Node from '../Node';
+import { NodeObject, Coord, Block } from '../Class/Class'
 
 const contextInit = {
     graph: [],
@@ -18,40 +19,15 @@ export const GraphContext = createContext(
     contextInit
 );
 
-export const Block = {
-    DEPART: "depart", 
-    ARRIVEE: "arrivee",
-    WALL: "wall"
-}
-
 const GraphProvider = (props) => {
 
-    class NodeObject {
-        NodeObject;
-        parent;
-        cout;
-        coord;
-        heuristique;
-        isWall;
-
-        constructor(NodeObject, parent, cout, coord, heuristique, isWall)
-        {
-            this.NodeObject = NodeObject;
-            this.parent = parent;
-            this.cout = cout;
-            this.coord = coord;
-            this.heuristique = heuristique;
-            this.isWall = isWall;
-        }
-    }
-
     const initGraph = () => {
-        let w = window.innerWidth / 30
+        let widthMax = window.innerWidth / 30
         let graphTmp = [];
         for (let xMax = 0; xMax < 20; xMax++ ) {
             let line = []
-            for (let yMax = 0; yMax < w; yMax++ ) {
-                const nodeObject = new NodeObject(Node, null, 0, {x: xMax, y: yMax}, 0, false);
+            for (let yMax = 0; yMax < widthMax; yMax++ ) {
+                const nodeObject = new NodeObject(Node, null, 0, new Coord(xMax, yMax), 0, false);
                 line.push(nodeObject)
             }
             graphTmp.push(line);

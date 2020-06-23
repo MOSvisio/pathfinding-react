@@ -1,5 +1,6 @@
 import React, { useState, useContext, useEffect, forwardRef, useImperativeHandle } from 'react';
-import { GraphContext, Block } from './Store/GraphContext';
+import { GraphContext } from './Store/GraphContext';
+import { Block, Coord } from './Class/Class';
 
 
 const Node = forwardRef((props, ref) => {
