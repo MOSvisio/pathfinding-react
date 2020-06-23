@@ -1,25 +1,27 @@
-import React, { createContext, useState, useRef } from 'react';
+import React, { createContext, useState, useRef, FunctionComponent, MutableRefObject, createRef } from 'react';
 import Node from '../Node';
 import { NodeObject, Coord, Block } from '../Class/Class'
 
 const contextInit = {
-    graph: [],
-    setGraph: () => {},
-    refs: null,
+    graph: [[new NodeObject()]],
+    setGraph: (e: []) => {},
+    refs: () => {},
     depart: {},
-    setDepart: () => {},
+    setDepart: (e: Coord) => {},
     arrivee: {},
-    setArrivee: () => {},
+    setArrivee: (e: Coord) => {},
     reset: () => {},
     block: "",
-    setBlock: () => {}
+    setBlock: (e: string) => {}
 };
 
 export const GraphContext = createContext(
     contextInit
 );
 
-const GraphProvider = (props) => {
+type GraphProviderProps = {}
+
+const GraphProvider: FunctionComponent<GraphProviderProps> = ({children}) => {
 
     const initGraph = () => {
         let widthMax = window.innerWidth / 30
@@ -27,7 +29,7 @@ const GraphProvider = (props) => {
         for (let xMax = 0; xMax < 20; xMax++ ) {
             let line = []
             for (let yMax = 0; yMax < widthMax; yMax++ ) {
-                const nodeObject = new NodeObject(Node, null, 0, new Coord(xMax, yMax), 0, false);
+                const nodeObject = new NodeObject(Node, 0, new Coord(xMax, yMax), 0, false);
                 line.push(nodeObject)
             }
             graphTmp.push(line);
@@ -61,21 +63,21 @@ const GraphProvider = (props) => {
 
     const contextValue = {
         graph: graph,
-        setGraph: (e) => setGraph(e),
-        refs: refs,
+        setGraph: (e : []) => setGraph(e),
+        refs: () => {return refs;},
         depart: depart,
-        setDepart: (e) => setDepart(e),
+        setDepart: (e : Coord) => setDepart(e),
         arrivee: arrivee,
-        setArrivee: (e) => setArrivee(e),
+        setArrivee: (e : Coord) => setArrivee(e),
         reset: () => reset(),
         block: block,
-        setBlock: (e) => setBlock(e)
+        setBlock: (e : string) => setBlock(e)
     };
 
     return (
         <div>
-            <GraphContext.Provider value = {contextValue}>
-                {props.children}
+            <GraphContext.Provider value={contextValue}>
+                {children}
             </GraphContext.Provider>
         </div>
     );
