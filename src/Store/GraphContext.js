@@ -9,12 +9,20 @@ const contextInit = {
     setDepart: () => {},
     arrivee: {},
     setArrivee: () => {},
-    reset: () => {}
+    reset: () => {},
+    block: "",
+    setBlock: () => {}
 };
 
 export const GraphContext = createContext(
     contextInit
 );
+
+export const Block = {
+    DEPART: "depart", 
+    ARRIVEE: "arrivee",
+    WALL: "wall"
+}
 
 const GraphProvider = (props) => {
 
@@ -38,10 +46,11 @@ const GraphProvider = (props) => {
     }
 
     const initGraph = () => {
+        let w = window.innerWidth / 30
         let graphTmp = [];
         for (let xMax = 0; xMax < 20; xMax++ ) {
             let line = []
-            for (let yMax = 0; yMax < 20; yMax++ ) {
+            for (let yMax = 0; yMax < w; yMax++ ) {
                 const nodeObject = new NodeObject(Node, null, 0, {x: xMax, y: yMax}, 0, false);
                 line.push(nodeObject)
             }
@@ -55,6 +64,7 @@ const GraphProvider = (props) => {
     const [graph, setGraph] = useState(initGraph);
     const [depart, setDepart] = useState({});
     const [arrivee, setArrivee] = useState({});
+    const [block, setBlock] = useState("");
 
     const reset = () => {
         for (const line of refs.current) {
@@ -81,7 +91,9 @@ const GraphProvider = (props) => {
         setDepart: (e) => setDepart(e),
         arrivee: arrivee,
         setArrivee: (e) => setArrivee(e),
-        reset: () => reset()
+        reset: () => reset(),
+        block: block,
+        setBlock: (e) => setBlock(e)
     };
 
     return (

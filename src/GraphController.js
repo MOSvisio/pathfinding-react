@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
-import { GraphContext } from './Store/GraphContext';
+import { GraphContext, Block } from './Store/GraphContext';
 
 const GraphController = () => {
-    const {graph, depart, arrivee, refs, reset} = useContext(GraphContext);
+    const {graph, depart, arrivee, refs, reset, block, setBlock} = useContext(GraphContext);
 
     /*
     useEffect(() => {
@@ -132,8 +132,19 @@ const GraphController = () => {
         return [];
     }
 
+
+    const setBlockType = (type) => {
+        setBlock(type);
+    }
+
     return (
         <div>
+            <div>
+                <button onClick={() => setBlockType(Block.DEPART)}>Depart</button>
+                <button onClick={() => setBlockType(Block.ARRIVEE)}>Arrivee</button>
+                <button onClick={() => setBlockType(Block.WALL)}>Wall</button>
+            </div>
+            <div>
             <table className="Graph" style={{borderSpacing: 0}}>
                 <tbody>
                 {
@@ -151,6 +162,7 @@ const GraphController = () => {
                 }
                 </tbody>
             </table>
+            </div>
             <button onClick= {() => aStarWiki()}>Resolve</button>
             <button onClick={() => reset()}>Reset</button>
         </div>
