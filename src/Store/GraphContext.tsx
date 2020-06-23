@@ -1,4 +1,4 @@
-import React, { createContext, useState, useRef, FunctionComponent } from 'react';
+import React, { createContext, useState, useRef, FunctionComponent, MutableRefObject } from 'react';
 import Node from '../Node';
 import { NodeObject, Coord, ContextLayout} from '../Class/Class'
 
@@ -6,6 +6,7 @@ const contextInit : ContextLayout = {
     graph : [[]],
     setGraph: (e: []) => {},
     refs: () => {},
+    setRefs: () => {},
     depart: {},
     setDepart: (e: Coord) => {},
     arrivee: {},
@@ -46,6 +47,7 @@ const GraphProvider: FunctionComponent<GraphProviderProps> = ({children}) => {
 
     // TODO: refs type
     const reset = () => {
+        console.log("reset")
         for (const line of refs.current) {
             for(const ref of line) {
                 if (ref) {
@@ -66,6 +68,7 @@ const GraphProvider: FunctionComponent<GraphProviderProps> = ({children}) => {
         graph: graph,
         setGraph: (e : []) => setGraph(e),
         refs: () => {return refs},
+        setRefs: (e: MutableRefObject<never[]>) => setRefs(e),
         depart: depart,
         setDepart: (e : Coord) => setDepart(e),
         arrivee: arrivee,

@@ -1,4 +1,4 @@
-import React, { ForwardRefExoticComponent, RefAttributes} from 'react';
+import React, { ForwardRefExoticComponent, RefAttributes, MutableRefObject} from 'react';
 import Node from '../Node';
 
 /**
@@ -8,6 +8,7 @@ export interface ContextLayout {
     graph : [NodeObject[]?],
     setGraph: (e: []) => void,
     refs: () => void,
+    setRefs: (e: MutableRefObject<never[]>) => void,
     depart: {},
     setDepart: (e: Coord) => void,
     arrivee: {},

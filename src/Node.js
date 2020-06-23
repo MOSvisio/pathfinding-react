@@ -4,7 +4,7 @@ import { Block, Coord } from './Class/Class';
 
 
 const Node = forwardRef((props, ref) => {
-    const {graph, setGraph, depart, setDepart, arrivee, setArrivee, refs, block} = useContext(GraphContext);
+    const {graph, setGraph, depart, setDepart, arrivee, setArrivee, block} = useContext(GraphContext);
     const [coord, setCoord] = useState({x: props.x, y: props.y});
     const [colorBg, setColorBg] = useState(props.color);
     const [isWall, setIsWall] = useState(false);
@@ -24,9 +24,6 @@ const Node = forwardRef((props, ref) => {
     }
 
     const setDepartArrivee = (e) => {
-        console.log("coord : " + refs.current[x][y].coord)
-        refs.current[x][y].setColor("red")
-        console.log("depart", depart)
         if (block === Block.DEPART)
         {
             setDepart({x: x, y:y});

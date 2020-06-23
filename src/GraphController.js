@@ -3,7 +3,7 @@ import { GraphContext } from './Store/GraphContext';
 import { Block } from './Class/Class';
 
 const GraphController = () => {
-    const {graph, depart, arrivee, refs, reset, block, setBlock} = useContext(GraphContext);
+    const {graph, depart, arrivee, refs, setRefs, reset, block, setBlock} = useContext(GraphContext);
 
     /*
     useEffect(() => {
@@ -84,7 +84,7 @@ const GraphController = () => {
     const showPath = async (tab) => {
         for (const ref of tab) {
             await sleep(200)
-            refs.current[ref.coord.x][ref.coord.y].setColor("green");
+            refs().current[ref.coord.x][ref.coord.y].setColor("green");
         }
     }
 
@@ -121,7 +121,7 @@ const GraphController = () => {
                 }    
                 else {
                     v.cout = current.cout + 1;
-                    refs.current[v.coord.x][v.coord.y].setCout(current.cout + 1)
+                    refs().current[v.coord.x][v.coord.y].setCout(current.cout + 1)
                     v.heuristique = v.cout + distanceBetweenNode(v, arriveeRef);
                     v.parent = current;
                     openList.push(v);
@@ -147,16 +147,19 @@ const GraphController = () => {
             </div>
             <div>
             <table className="Graph" style={{borderSpacing: 0}}>
+                
                 <tbody>
                 {
-                    refs.current = [],
+                    setRefs(refs().current = []),
                     graph.map((rows, index) => {
+                        let refss = refs()
                         let x = index
                         let lineRef = []
                         let row = rows.map((Component, index) => {
                             return <Component.NodeObject color="white" ref={el => lineRef.push(el)} x={x} y={index} key={x + ':' + index} />
                         })
-                        refs.current.push(lineRef)
+                        refss.current.push(lineRef)
+                        setRefs(refss)
                         return <tr className="row" key={index}>{row}</tr>
                     })
                     
