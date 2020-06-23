@@ -1,13 +1,32 @@
 import React, { ForwardRefExoticComponent, RefAttributes} from 'react';
 import Node from '../Node';
 
+/**
+ * Layout to initialize the context
+ */
+export interface ContextLayout {
+    graph : [NodeObject[]?],
+    setGraph: (e: []) => void,
+    refs: () => void,
+    depart: {},
+    setDepart: (e: Coord) => void,
+    arrivee: {},
+    setArrivee: (e: Coord) => void,
+    reset: () => void,
+    block: string,
+    setBlock: (e: string) => void
+}
+
+/**
+ * Class: represent a box with it's property
+ */
 export class NodeObject {
-    NodeObject?: ForwardRefExoticComponent<RefAttributes<any>>;
-    parent?: NodeObject;
-    cout?: number;
-    coord?: Coord;
-    heuristique?: number;
-    isWall?: boolean;
+    public NodeObject?: ForwardRefExoticComponent<RefAttributes<any>>;
+    public parent?: NodeObject;
+    public cout?: number;
+    public coord?: Coord;
+    public heuristique?: number;
+    public isWall?: boolean;
 
 
     constructor(NodeObject?: ForwardRefExoticComponent<RefAttributes<any>>, cout?: number, coord?: Coord, heuristique?: number, isWall?: boolean, parent?: NodeObject)
@@ -22,11 +41,11 @@ export class NodeObject {
 }
 
 /**
- * class: contains coordonate of a case
+ * class: contains coordonate of a box
  */
 export class Coord {
-    x: number;
-    y: number;
+    public x: number;
+    public y: number;
     
     constructor(x: number, y: number) 
     {

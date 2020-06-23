@@ -1,9 +1,9 @@
-import React, { createContext, useState, useRef, FunctionComponent, MutableRefObject, createRef } from 'react';
+import React, { createContext, useState, useRef, FunctionComponent } from 'react';
 import Node from '../Node';
-import { NodeObject, Coord, Block } from '../Class/Class'
+import { NodeObject, Coord, ContextLayout} from '../Class/Class'
 
-const contextInit = {
-    graph: [[new NodeObject()]],
+const contextInit : ContextLayout = {
+    graph : [[]],
     setGraph: (e: []) => {},
     refs: () => {},
     depart: {},
@@ -24,10 +24,10 @@ type GraphProviderProps = {}
 const GraphProvider: FunctionComponent<GraphProviderProps> = ({children}) => {
 
     const initGraph = () => {
-        let widthMax = window.innerWidth / 30
-        let graphTmp = [];
+        let widthMax : number = window.innerWidth / 30
+        let graphTmp : [NodeObject[]?] = [];
         for (let xMax = 0; xMax < 20; xMax++ ) {
-            let line = []
+            let line : NodeObject[] = []
             for (let yMax = 0; yMax < widthMax; yMax++ ) {
                 const nodeObject = new NodeObject(Node, 0, new Coord(xMax, yMax), 0, false);
                 line.push(nodeObject)
@@ -44,6 +44,7 @@ const GraphProvider: FunctionComponent<GraphProviderProps> = ({children}) => {
     const [arrivee, setArrivee] = useState({});
     const [block, setBlock] = useState("");
 
+    // TODO: refs type
     const reset = () => {
         for (const line of refs.current) {
             for(const ref of line) {
@@ -61,10 +62,10 @@ const GraphProvider: FunctionComponent<GraphProviderProps> = ({children}) => {
         setArrivee({});
     }
 
-    const contextValue = {
+    const contextValue : ContextLayout = {
         graph: graph,
         setGraph: (e : []) => setGraph(e),
-        refs: () => {return refs;},
+        refs: () => {return refs},
         depart: depart,
         setDepart: (e : Coord) => setDepart(e),
         arrivee: arrivee,
