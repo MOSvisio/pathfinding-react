@@ -14,9 +14,9 @@ export type Props = {
 export interface ContextLayout {
     graph : [NodeObject[]?],
     setGraph: (e: []) => void,
-    depart: {},
+    depart: Coord,
     setDepart: (e: Coord) => void,
-    arrivee: {},
+    arrivee: Coord,
     setArrivee: (e: Coord) => void,
     reset: () => void,
     block: string,
@@ -27,7 +27,6 @@ export interface ContextLayout {
  * Class: represent a box with it's property
  */
 export class NodeObject {
-    public NodeObject?: ForwardRefExoticComponent<Props & RefAttributes<any>>;
     public parent?: NodeObject;
     public cout?: number;
     public coord?: Coord;
@@ -35,9 +34,8 @@ export class NodeObject {
     public isWall?: boolean;
 
 
-    constructor(NodeObject?: ForwardRefExoticComponent<Props & RefAttributes<any>>, cout?: number, coord?: Coord, heuristique?: number, isWall?: boolean, parent?: NodeObject)
+    constructor(cout?: number, coord?: Coord, heuristique?: number, isWall?: boolean, parent?: NodeObject)
     {
-        this.NodeObject = NodeObject;
         this.parent = parent;
         this.cout = cout;
         this.coord = coord;

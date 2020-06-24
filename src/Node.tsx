@@ -1,9 +1,23 @@
-import React, { useState, useContext, useEffect, forwardRef, useImperativeHandle } from 'react';
+import React, { useState, useContext, useEffect, forwardRef, useImperativeHandle,  } from 'react';
 import { GraphContext } from './Store/GraphContext';
 import { Block, Coord, Props } from './Class/Class';
 
+export type NodeHandle = {
 
-const Node = forwardRef((props: Props, ref) => {
+        coord: Coord,
+
+        colorBg: string,
+
+        setColor: (color: string) => void,
+        
+        resetColor: () => void,
+
+        setIsWall: (isWall: boolean) =>void,
+
+        setCout: (cout: number) => void
+}
+
+const Node = forwardRef<NodeHandle, Props>((props: Props, ref) => {
     const {graph, setGraph, depart, setDepart, arrivee, setArrivee, block} = useContext(GraphContext);
     const [coord, setCoord] = useState(new Coord(props.x, props.y));
     const [colorBg, setColorBg] = useState(props.color);
@@ -18,19 +32,15 @@ const Node = forwardRef((props: Props, ref) => {
             setColor("white")
     }, [refs])*/
 
-    const setColor = (color: string) => {
-        if (colorBg !== "blue" && colorBg !== "yellow")
-            setColorBg(color)
-    }
-
     const setDepartArrivee = (e: React.MouseEvent) => {
-        if (block === Block.DEPART && Object.keys(depart).length === 0)
+        console.log("clic", coord)
+        if (block === Block.DEPART)
         {
             setDepart({x: x, y:y});
             setColorBg("blue")
             console.log("set Depart");
         }
-        else if (block === Block.ARRIVEE  && Object.keys(arrivee).length === 0)
+        else if (block === Block.ARRIVEE)
         {
             setArrivee({x: x, y:y});
             setColorBg("yellow");
@@ -52,7 +62,10 @@ const Node = forwardRef((props: Props, ref) => {
 
         colorBg,
 
-        setColor,
+        setColor: (color: string) => {
+            if (colorBg !== "blue" && colorBg !== "yellow")
+                setColorBg(color)
+        },
         
         resetColor: () => {
             setColorBg("white");
@@ -69,7 +82,7 @@ const Node = forwardRef((props: Props, ref) => {
     }));
 
     return (
-        <td {...props} onClick={(e) => setDepartArrivee(e)} style={{ border: "1px solid #333", width: "30px", height: "30px", backgroundColor: colorBg}}>
+        <td  onClick={(e) => setDepartArrivee(e)} style={{ border: "1px solid #333", width: "30px", height: "30px", backgroundColor: colorBg}}>
             {isWall ? "" : ""}
         </td>
     );

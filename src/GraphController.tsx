@@ -1,18 +1,21 @@
-import React, { useContext, useState, useRef, useEffect } from 'react';
+import React, { useContext, useState, useRef, useEffect, ForwardRefExoticComponent, RefAttributes } from 'react';
 import { GraphContext } from './Store/GraphContext';
-import { Block } from './Class/Class';
+import { Block, NodeObject, Props } from './Class/Class';
+import  Node  from './Node';
 
 const GraphController = () => {
     const {graph, depart, arrivee, reset, block, setBlock} = useContext(GraphContext);
 
-    const [refs, setRefs] = useState(useRef([]));
+    type NodeHandle = React.ElementRef<typeof Node>;
+    const [refs, setRefs] = useState(useRef<[NodeHandle[]]>([[]]));
+
 
     const [isOver, setIsOver] = useState(true)
     
     useEffect(() => {
         console.log("changed graph", graph);
         console.log("reset")
-        for (const line of refs.current) {
+        for (const line of refs!.current!) {
             for(const ref of line) {
                 if (ref) {
                     ref.resetColor()
@@ -21,8 +24,6 @@ const GraphController = () => {
                 }
             }
         }
-
-        refs.current = []
     }, [graph]);
 
 
@@ -44,49 +45,49 @@ const GraphController = () => {
         return graph[ref.coord.x][ref.coord.y];
     }*/
 
-    const compared2Nodes = (node1, node2) => {
-        if (node1.heuristique < node2.heuristique ) {
+    const compared2Nodes = (node1: NodeObject, node2: NodeObject) =>{
+        if (node1!.heuristique! < node2!.heuristique! ) {
             return -1;
         }
-        else if (node1.heuristique === node2.heuristique) {
+        else if (node1!.heuristique! === node2!.heuristique!) {
             return 0;
         }
         else return 1;
     }
 
-    const distanceBetweenNode = (node1, node2) => {
-        const d1 = Math.abs(parseInt(node1.coord.x) - parseInt(node2.coord.x));
-        const d2 = Math.abs(parseInt(node1.coord.x) - parseInt(node2.coord.y));
+    const distanceBetweenNode = (node1: NodeObject, node2: NodeObject) => {
+        const d1 = Math.abs((node1.coord!.x) - (node2.coord!.x));
+        const d2 = Math.abs((node1.coord!.x) - (node2.coord!.y));
         return Math.floor(d1 + d2);
     }
 
     // refactor
-    const getNeighboorRef = (x, y) => {
+    const getNeighboorRef = (x: number, y: number) => {
         let neighboor = [];
         //top
-        if ((graph[x-1] && graph[x-1][y])) {
-            neighboor.push(graph[x-1][y]);
+        if ((graph[x-1] && graph[x-1]![y])) {
+            neighboor.push(graph[x-1]![y]);
         }
         //bottom
-        if ((graph[x+1] && graph[x+1][y])) {
-            neighboor.push(graph[x+1][y]);
+        if ((graph[x+1] && graph[x+1]![y])) {
+            neighboor.push(graph[x+1]![y]);
         }
         //left
-        if ((graph[x] && graph[x][y-1])) {
-            neighboor.push(graph[x][y-1]);
+        if ((graph[x] && graph[x]![y-1])) {
+            neighboor.push(graph[x]![y-1]);
         }
         //right
-        if ((graph[x] && graph[x][y+1])) {
-            neighboor.push(graph[x][y+1]);
+        if ((graph[x] && graph[x]![y+1])) {
+            neighboor.push(graph[x]![y+1]);
         }
         return neighboor;
     }
 
     // TODO : replace for by find
-    const existWithLowerCost = (v, tab) => {
+    const existWithLowerCost = (v: NodeObject, tab: NodeObject[]) => {
         if (tab.includes(v)) {
             for (const value of tab) {
-                if (value.cout <= v.cout)
+                if (value.cout! <= v.cout!)
                     return true;
                 return false;
             }
@@ -94,19 +95,20 @@ const GraphController = () => {
         return false;
     }
 
-    const sleep = (ms) => {
+    const sleep = (ms: number) => {
         return new Promise(resolve => setTimeout(resolve, ms))
     }
 
-    const showPath = async (tab) => {
+    const showPath = async (tab: NodeObject[]) => {
+        console.log(tab)
         for (const ref of tab) {
             await sleep(200)
-            refs.current[ref.coord.x][ref.coord.y].setColor("green");
+            refs.current![ref.coord!.x][ref.coord!.y].setColor("green");
         }
         setIsOver(true)
     }
 
-    const calculatePath = (current) => {
+    const calculatePath = (current: NodeObject) => {
         let curr = current;
         let ret = []
 
@@ -122,40 +124,41 @@ const GraphController = () => {
     // TODO: The sort didn't work openlist is a priority queue ? 
     const aStarWiki = () => {
         setIsOver(false)
-        let closedList = [];
-        let openList = [];
+        let closedList : NodeObject[] = [];
+        let openList : NodeObject[] = [];
         if (Object.keys(depart).length === 0 || Object.keys(arrivee).length === 0)
             return;
-        const departRef = graph[depart?.x][depart?.y];
-        const arriveeRef = graph[arrivee?.x][arrivee?.y];
+        const departRef = graph[depart.x]![depart.y];
+        const arriveeRef = graph[arrivee.x]![arrivee.y];
         openList.push(departRef);
         while (openList.length > 0) {
             const current = openList.shift();
-            if (current.coord.x === arriveeRef.coord.x && current.coord.y === arriveeRef.coord.y) {
-                calculatePath(current)
+            if (current!.coord!.x === arriveeRef!.coord!.x && current!.coord!.y === arriveeRef!.coord!.y) {
+                calculatePath(current!)
                 return;
             }
 
-            getNeighboorRef(current.coord.x, current.coord.y).forEach((v) => {
+            getNeighboorRef(current!.coord!.x, current!.coord!.y).forEach((v) => {
                 if (closedList.includes(v) || existWithLowerCost(v, openList) || v.isWall) {
                     return;
                 }    
                 else {
-                    v.cout = current.cout + 1;
-                    refs.current[v.coord.x][v.coord.y].setCout(current.cout + 1)
+                    v.cout = current!.cout! + 1;
+                    //if (current!.cout)
+                    //    refs.current[v.coord!.x][v.coord!.y].setCout(current!.cout + 1)
                     v.heuristique = v.cout + distanceBetweenNode(v, arriveeRef);
                     v.parent = current;
                     openList.push(v);
                     openList.sort(compared2Nodes)
                 }
             });
-            closedList.push(current);
+            closedList.push(current!);
         }
         return [];
     }
 
 
-    const setBlockType = (type) => {
+    const setBlockType = (type: string) => {
         setBlock(type);
     }
 
@@ -171,14 +174,14 @@ const GraphController = () => {
                 
                 <tbody>
                 {
-                    refs.current = [],
+                    
                     graph.map((rows, index) => {
                         let x = index
-                        let lineRef = []
-                        let row = rows.map((Component, index) => {
-                            return <Component.NodeObject color="white" ref={el => lineRef.push(el)} x={x} y={index} key={x + ':' + index} />
+                        let lineRef : NodeHandle[]= []
+                        let row = rows!.map((Component, index) => {
+                            return <Node color="white" ref={(el: NodeHandle) => lineRef.push(el)} x={x} y={index} key={x + ':' + index} />
                         })
-                        refs.current.push(lineRef)
+                        refs.current!.push(lineRef)
                         return <tr className="row" key={index}>{row}</tr>
                     })
                     

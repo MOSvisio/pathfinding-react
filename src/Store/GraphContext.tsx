@@ -5,9 +5,9 @@ import { NodeObject, Coord, ContextLayout} from '../Class/Class'
 const contextInit : ContextLayout = {
     graph : [[]],
     setGraph: (e: []) => {},
-    depart: {},
+    depart: new Coord(0,0),
     setDepart: (e: Coord) => {},
-    arrivee: {},
+    arrivee: new Coord(0,0),
     setArrivee: (e: Coord) => {},
     reset: () => {},
     block: "",
@@ -28,7 +28,7 @@ const GraphProvider: FunctionComponent<GraphProviderProps> = ({children}) => {
         for (let xMax = 0; xMax < 20; xMax++ ) {
             let line : NodeObject[] = []
             for (let yMax = 0; yMax < widthMax; yMax++ ) {
-                const nodeObject = new NodeObject(Node, 0, new Coord(xMax, yMax), 0, false);
+                const nodeObject = new NodeObject(0, new Coord(xMax, yMax), 0, false);
                 line.push(nodeObject)
             }
             graphTmp.push(line);
@@ -38,16 +38,16 @@ const GraphProvider: FunctionComponent<GraphProviderProps> = ({children}) => {
     }
 
     const [graph, setGraph] = useState(initGraph);
-    const [depart, setDepart] = useState({});
-    const [arrivee, setArrivee] = useState({});
+    const [depart, setDepart] = useState(new Coord(0,0));
+    const [arrivee, setArrivee] = useState(new Coord(0,0));
     const [block, setBlock] = useState("");
 
     // TODO: refs type
     const reset = () => {
         
         setGraph(initGraph);
-        setDepart({});
-        setArrivee({});
+        setDepart(new Coord(0,0));
+        setArrivee(new Coord(0,0));
     }
 
     const contextValue : ContextLayout = {
