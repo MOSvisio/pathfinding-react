@@ -5,7 +5,7 @@ import { Block, Coord } from './Class/Class';
 
 const Node = forwardRef((props, ref) => {
     const {graph, setGraph, depart, setDepart, arrivee, setArrivee, block} = useContext(GraphContext);
-    const [coord, setCoord] = useState({x: props.x, y: props.y});
+    const [coord, setCoord] = useState(new Coord(props.x, props.y));
     const [colorBg, setColorBg] = useState(props.color);
     const [isWall, setIsWall] = useState(false);
     const [cout, setCout] = useState(0);
@@ -24,13 +24,13 @@ const Node = forwardRef((props, ref) => {
     }
 
     const setDepartArrivee = (e) => {
-        if (block === Block.DEPART)
+        if (block === Block.DEPART && Object.keys(depart).length === 0)
         {
             setDepart({x: x, y:y});
             setColorBg("blue")
             console.log("set Depart");
         }
-        else if (block === Block.ARRIVEE)
+        else if (block === Block.ARRIVEE  && Object.keys(arrivee).length === 0)
         {
             setArrivee({x: x, y:y});
             setColorBg("yellow");
@@ -45,6 +45,10 @@ const Node = forwardRef((props, ref) => {
     }
 
     useImperativeHandle(ref, () => ({
+
+        coord,
+
+        colorBg,
 
         setColor,
         

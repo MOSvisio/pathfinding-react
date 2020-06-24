@@ -5,8 +5,6 @@ import { NodeObject, Coord, ContextLayout} from '../Class/Class'
 const contextInit : ContextLayout = {
     graph : [[]],
     setGraph: (e: []) => {},
-    refs: () => {},
-    setRefs: () => {},
     depart: {},
     setDepart: (e: Coord) => {},
     arrivee: {},
@@ -39,7 +37,6 @@ const GraphProvider: FunctionComponent<GraphProviderProps> = ({children}) => {
 
     }
 
-    const [refs, setRefs] = useState(useRef([]));
     const [graph, setGraph] = useState(initGraph);
     const [depart, setDepart] = useState({});
     const [arrivee, setArrivee] = useState({});
@@ -47,18 +44,7 @@ const GraphProvider: FunctionComponent<GraphProviderProps> = ({children}) => {
 
     // TODO: refs type
     const reset = () => {
-        console.log("reset")
-        for (const line of refs.current) {
-            for(const ref of line) {
-                if (ref) {
-                    ref.resetColor()
-                    ref.setCout(0)
-                    ref.setIsWall(false)
-                }
-            }
-        }
-
-        refs.current = []
+        
         setGraph(initGraph);
         setDepart({});
         setArrivee({});
@@ -67,8 +53,6 @@ const GraphProvider: FunctionComponent<GraphProviderProps> = ({children}) => {
     const contextValue : ContextLayout = {
         graph: graph,
         setGraph: (e : []) => setGraph(e),
-        refs: () => {return refs},
-        setRefs: (e: MutableRefObject<never[]>) => setRefs(e),
         depart: depart,
         setDepart: (e : Coord) => setDepart(e),
         arrivee: arrivee,
