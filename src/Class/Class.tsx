@@ -1,6 +1,13 @@
 import React, { ForwardRefExoticComponent, RefAttributes, MutableRefObject} from 'react';
 import Node from '../Node';
 
+
+
+export type Props = {
+    x: number,
+    y: number,
+    color: string
+}
 /**
  * Layout to initialize the context
  */
@@ -20,7 +27,7 @@ export interface ContextLayout {
  * Class: represent a box with it's property
  */
 export class NodeObject {
-    public NodeObject?: ForwardRefExoticComponent<RefAttributes<any>>;
+    public NodeObject?: ForwardRefExoticComponent<Props & RefAttributes<any>>;
     public parent?: NodeObject;
     public cout?: number;
     public coord?: Coord;
@@ -28,7 +35,7 @@ export class NodeObject {
     public isWall?: boolean;
 
 
-    constructor(NodeObject?: ForwardRefExoticComponent<RefAttributes<any>>, cout?: number, coord?: Coord, heuristique?: number, isWall?: boolean, parent?: NodeObject)
+    constructor(NodeObject?: ForwardRefExoticComponent<Props & RefAttributes<any>>, cout?: number, coord?: Coord, heuristique?: number, isWall?: boolean, parent?: NodeObject)
     {
         this.NodeObject = NodeObject;
         this.parent = parent;

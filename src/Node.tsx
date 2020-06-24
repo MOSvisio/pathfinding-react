@@ -1,9 +1,9 @@
 import React, { useState, useContext, useEffect, forwardRef, useImperativeHandle } from 'react';
 import { GraphContext } from './Store/GraphContext';
-import { Block, Coord } from './Class/Class';
+import { Block, Coord, Props } from './Class/Class';
 
 
-const Node = forwardRef((props, ref) => {
+const Node = forwardRef((props: Props, ref) => {
     const {graph, setGraph, depart, setDepart, arrivee, setArrivee, block} = useContext(GraphContext);
     const [coord, setCoord] = useState(new Coord(props.x, props.y));
     const [colorBg, setColorBg] = useState(props.color);
@@ -18,12 +18,12 @@ const Node = forwardRef((props, ref) => {
             setColor("white")
     }, [refs])*/
 
-    const setColor = (color) => {
+    const setColor = (color: string) => {
         if (colorBg !== "blue" && colorBg !== "yellow")
             setColorBg(color)
     }
 
-    const setDepartArrivee = (e) => {
+    const setDepartArrivee = (e: React.MouseEvent) => {
         if (block === Block.DEPART && Object.keys(depart).length === 0)
         {
             setDepart({x: x, y:y});
@@ -39,7 +39,9 @@ const Node = forwardRef((props, ref) => {
         else if (block === Block.WALL) 
         {
             setIsWall(true)
-            graph[coord.x][coord.y].isWall = true
+            const graphObj = graph[coord.x]![coord.y]
+            
+            graphObj!.isWall = true
             setColorBg("black");
         }
     }
@@ -56,18 +58,18 @@ const Node = forwardRef((props, ref) => {
             setColorBg("white");
         },
 
-        setIsWall: (isWall) => {
+        setIsWall: (isWall: boolean) => {
             setIsWall(isWall);
         },
 
-        setCout: (cout) => {
+        setCout: (cout: number) => {
             setCout(cout);
         }
     
     }));
 
     return (
-        <td onClick={(e) => setDepartArrivee(e)} style={{ border: "1px solid #333", width: "30px", height: "30px", backgroundColor: colorBg}}>
+        <td {...props} onClick={(e) => setDepartArrivee(e)} style={{ border: "1px solid #333", width: "30px", height: "30px", backgroundColor: colorBg}}>
             {isWall ? "" : ""}
         </td>
     );
