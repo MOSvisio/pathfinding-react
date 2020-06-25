@@ -18,7 +18,7 @@ export type NodeHandle = {
 }
 
 const Node = forwardRef<NodeHandle, Props>((props: Props, ref) => {
-    const {graph, setGraph, depart, setDepart, arrivee, setArrivee, block} = useContext(GraphContext);
+    const {graph, depart, setDepart, arrivee, setArrivee, block} = useContext(GraphContext);
     const [coord, setCoord] = useState(new Coord(props.x, props.y));
     const [colorBg, setColorBg] = useState(props.color);
     const [isWall, setIsWall] = useState(false);
@@ -34,19 +34,19 @@ const Node = forwardRef<NodeHandle, Props>((props: Props, ref) => {
 
     const setDepartArrivee = (e: React.MouseEvent) => {
         console.log("clic", coord)
-        if (block === Block.DEPART)
+        if (block === Block.DEPART && depart.x === -1)
         {
-            setDepart({x: x, y:y});
+            setDepart(new Coord(x, y));
             setColorBg("blue")
             console.log("set Depart");
         }
         else if (block === Block.ARRIVEE)
         {
-            setArrivee({x: x, y:y});
+            setArrivee(new Coord(x, y));
             setColorBg("yellow");
             console.log("set Arrivee");
         }
-        else if (block === Block.WALL) 
+        else if (block === Block.WALL && arrivee.x === -1) 
         {
             setIsWall(true)
             const graphObj = graph[coord.x]![coord.y]

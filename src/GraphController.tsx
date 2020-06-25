@@ -7,7 +7,7 @@ const GraphController = () => {
     const {graph, depart, arrivee, reset, block, setBlock} = useContext(GraphContext);
 
     type NodeHandle = React.ElementRef<typeof Node>;
-    const [refs, setRefs] = useState(useRef<[NodeHandle[]]>([[]]));
+    const [refs, setRefs] = useState(useRef<[NodeHandle[]?]>([]));
 
 
     const [isOver, setIsOver] = useState(true)
@@ -16,7 +16,7 @@ const GraphController = () => {
         console.log("changed graph", graph);
         console.log("reset")
         for (const line of refs!.current!) {
-            for(const ref of line) {
+            for(const ref of line!) {
                 if (ref) {
                     ref.resetColor()
                     ref.setCout(0)
@@ -103,7 +103,7 @@ const GraphController = () => {
         console.log(tab)
         for (const ref of tab) {
             await sleep(200)
-            refs.current![ref.coord!.x][ref.coord!.y].setColor("green");
+            refs.current![ref.coord!.x]![ref.coord!.y].setColor("green");
         }
         setIsOver(true)
     }
@@ -126,7 +126,7 @@ const GraphController = () => {
         setIsOver(false)
         let closedList : NodeObject[] = [];
         let openList : NodeObject[] = [];
-        if (Object.keys(depart).length === 0 || Object.keys(arrivee).length === 0)
+        if (depart.x === -1 && depart.y === -1 || arrivee.x === -1 && arrivee.y === -1)
             return;
         const departRef = graph[depart.x]![depart.y];
         const arriveeRef = graph[arrivee.x]![arrivee.y];

@@ -5,7 +5,7 @@ import { NodeObject, Coord, ContextLayout} from '../Class/Class'
 const contextInit : ContextLayout = {
     graph : [[]],
     setGraph: (e: []) => {},
-    depart: new Coord(0,0),
+    depart: new Coord(-1,-1),
     setDepart: (e: Coord) => {},
     arrivee: new Coord(0,0),
     setArrivee: (e: Coord) => {},
@@ -38,16 +38,16 @@ const GraphProvider: FunctionComponent<GraphProviderProps> = ({children}) => {
     }
 
     const [graph, setGraph] = useState(initGraph);
-    const [depart, setDepart] = useState(new Coord(0,0));
-    const [arrivee, setArrivee] = useState(new Coord(0,0));
+    const [depart, setDepart] = useState(new Coord(-1,-1));
+    const [arrivee, setArrivee] = useState(new Coord(-1,-1));
     const [block, setBlock] = useState("");
 
     // TODO: refs type
     const reset = () => {
         
         setGraph(initGraph);
-        setDepart(new Coord(0,0));
-        setArrivee(new Coord(0,0));
+        setDepart(new Coord(-1,-1));
+        setArrivee(new Coord(-1,-1));
     }
 
     const contextValue : ContextLayout = {
