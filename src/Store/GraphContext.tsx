@@ -5,10 +5,10 @@ import { NodeObject, Coord, ContextLayout} from '../Class/Class'
 const contextInit : ContextLayout = {
     graph : [[]],
     setGraph: (e: []) => {},
-    depart: new Coord(-1,-1),
-    setDepart: (e: Coord) => {},
-    arrivee: new Coord(0,0),
-    setArrivee: (e: Coord) => {},
+    start: new Coord(-1,-1),
+    setstart: (e: Coord) => {},
+    finish: new Coord(0,0),
+    setfinish: (e: Coord) => {},
     reset: () => {},
     block: "",
     setBlock: (e: string) => {}
@@ -39,25 +39,25 @@ const GraphProvider: FunctionComponent<GraphProviderProps> = ({children}) => {
     }
 
     const [graph, setGraph] = useState(initGraph);
-    const [depart, setDepart] = useState(new Coord(-1,-1));
-    const [arrivee, setArrivee] = useState(new Coord(-1,-1));
+    const [start, setstart] = useState(new Coord(-1,-1));
+    const [finish, setfinish] = useState(new Coord(-1,-1));
     const [block, setBlock] = useState("");
 
     // TODO: refs type
     const reset = () => {
         
         setGraph(initGraph);
-        setDepart(new Coord(-1,-1));
-        setArrivee(new Coord(-1,-1));
+        setstart(new Coord(-1,-1));
+        setfinish(new Coord(-1,-1));
     }
 
     const contextValue : ContextLayout = {
         graph: graph,
         setGraph: (e : []) => setGraph(e),
-        depart: depart,
-        setDepart: (e : Coord) => setDepart(e),
-        arrivee: arrivee,
-        setArrivee: (e : Coord) => setArrivee(e),
+        start: start,
+        setstart: (e : Coord) => setstart(e),
+        finish: finish,
+        setfinish: (e : Coord) => setfinish(e),
         reset: () => reset(),
         block: block,
         setBlock: (e : string) => setBlock(e)

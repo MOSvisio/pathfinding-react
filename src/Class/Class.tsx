@@ -14,10 +14,10 @@ export type Props = {
 export interface ContextLayout {
     graph : [NodeObject[]?],
     setGraph: (e: []) => void,
-    depart: Coord,
-    setDepart: (e: Coord) => void,
-    arrivee: Coord,
-    setArrivee: (e: Coord) => void,
+    start: Coord,
+    setstart: (e: Coord) => void,
+    finish: Coord,
+    setfinish: (e: Coord) => void,
     reset: () => void,
     block: string,
     setBlock: (e: string) => void
@@ -59,7 +59,7 @@ export class Coord {
 }
 
 export const Block = {
-    DEPART:  "depart" , 
-    ARRIVEE: "arrivee",
+    start:  "start" , 
+    finish: "finish",
     WALL:    "wall"
 }

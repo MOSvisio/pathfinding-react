@@ -4,7 +4,7 @@ import { Block, NodeObject, Props } from './Class/Class';
 import  Node  from './Node';
 
 const GraphController = () => {
-    const {graph, depart, arrivee, reset, block, setBlock} = useContext(GraphContext);
+    const {graph, start, finish, reset, block, setBlock} = useContext(GraphContext);
 
     type NodeHandle = React.ElementRef<typeof Node>;
     const [refs, setRefs] = useState(useRef<[NodeHandle[]?]>([]));
@@ -29,12 +29,12 @@ const GraphController = () => {
 
     /*
     useEffect(() => {
-        console.log("depart modifie", depart)
-    }, [depart]);
+        console.log("start modifie", start)
+    }, [start]);
 
     useEffect(() => {
-        console.log("arrivee modifié", arrivee)
-    }, [arrivee]);
+        console.log("finish modifié", finish)
+    }, [finish]);
 
     useEffect(() => {
         console.log("refs modifié", refs)
@@ -126,14 +126,14 @@ const GraphController = () => {
         setIsOver(false)
         let closedList : NodeObject[] = [];
         let openList : NodeObject[] = [];
-        if (depart.x === -1 && depart.y === -1 || arrivee.x === -1 && arrivee.y === -1)
+        if (start.x === -1 && start.y === -1 || finish.x === -1 && finish.y === -1)
             return;
-        const departRef = graph[depart.x]![depart.y];
-        const arriveeRef = graph[arrivee.x]![arrivee.y];
-        openList.push(departRef);
+        const startRef = graph[start.x]![start.y];
+        const finishRef = graph[finish.x]![finish.y];
+        openList.push(startRef);
         while (openList.length > 0) {
             const current = openList.shift();
-            if (current!.coord!.x === arriveeRef!.coord!.x && current!.coord!.y === arriveeRef!.coord!.y) {
+            if (current!.coord!.x === finishRef!.coord!.x && current!.coord!.y === finishRef!.coord!.y) {
                 calculatePath(current!)
                 return;
             }
@@ -146,7 +146,7 @@ const GraphController = () => {
                     v.cout = current!.cout! + 1;
                     //if (current!.cout)
                     //    refs.current[v.coord!.x][v.coord!.y].setCout(current!.cout + 1)
-                    v.heuristique = v.cout + distanceBetweenNode(v, arriveeRef);
+                    v.heuristique = v.cout + distanceBetweenNode(v, finishRef);
                     v.parent = current;
                     openList.push(v);
                     openList.sort(compared2Nodes)
@@ -165,8 +165,8 @@ const GraphController = () => {
     return (
         <div>
             <div>
-                <button disabled={!isOver} onClick={() => setBlockType(Block.DEPART)}>Depart</button>
-                <button disabled={!isOver} onClick={() => setBlockType(Block.ARRIVEE)}>Arrivee</button>
+                <button disabled={!isOver} onClick={() => setBlockType(Block.start)}>Start</button>
+                <button disabled={!isOver} onClick={() => setBlockType(Block.finish)}>Finish</button>
                 <button disabled={!isOver} onClick={() => setBlockType(Block.WALL)}>Wall</button>
             </div>
             <div>
