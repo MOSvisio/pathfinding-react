@@ -40,13 +40,13 @@ const Node = forwardRef<NodeHandle, Props>((props: Props, ref) => {
             setColorBg("blue")
             console.log("set Depart");
         }
-        else if (block === Block.ARRIVEE)
+        else if (block === Block.ARRIVEE && arrivee.x === -1)
         {
             setArrivee(new Coord(x, y));
             setColorBg("yellow");
             console.log("set Arrivee");
         }
-        else if (block === Block.WALL && arrivee.x === -1) 
+        else if (block === Block.WALL) 
         {
             setIsWall(true)
             const graphObj = graph[coord.x]![coord.y]
