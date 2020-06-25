@@ -24,8 +24,9 @@ const GraphProvider: FunctionComponent<GraphProviderProps> = ({children}) => {
 
     const initGraph = () => {
         let widthMax : number = window.innerWidth / 30
+        let heigthMax : number = window.innerHeight / 40
         let graphTmp : [NodeObject[]?] = [];
-        for (let xMax = 0; xMax < 20; xMax++ ) {
+        for (let xMax = 0; xMax < heigthMax; xMax++ ) {
             let line : NodeObject[] = []
             for (let yMax = 0; yMax < widthMax; yMax++ ) {
                 const nodeObject = new NodeObject(0, new Coord(xMax, yMax), 0, false);
