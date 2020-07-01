@@ -46,15 +46,22 @@ const Node = forwardRef<NodeHandle, Props>((props: Props, ref) => {
             setColorBg("yellow");
             console.log("set finish");
         }
-        else if (block === Block.WALL) 
-        {
-            setIsWall(true)
-            const graphObj = graph[coord.x]![coord.y]
-            
-            graphObj!.isWall = true
-            setColorBg("black");
-        }
     }
+
+    function onMouseEnterDo(e : React.MouseEvent){
+        e.preventDefault();
+        if(e.buttons===1){//code for left click}
+            if (block === Block.WALL) 
+            {
+                setIsWall(true)
+                const graphObj = graph[coord.x]![coord.y]
+                
+                graphObj!.isWall = true
+                setColorBg("black");
+            }
+        }
+      }
+
 
     useImperativeHandle(ref, () => ({
 
@@ -82,7 +89,7 @@ const Node = forwardRef<NodeHandle, Props>((props: Props, ref) => {
     }));
 
     return (
-        <td  onClick={(e) => setstartfinish(e)} style={{ border: "1px solid #333", width: "30px", height: "30px", backgroundColor: colorBg}}>
+        <td onMouseOver={(e) => onMouseEnterDo(e)} onClick={(e) => setstartfinish(e)} style={{ border: "1px solid #333", width: "30px", height: "30px", backgroundColor: colorBg}}>
             {isWall ? "" : ""}
         </td>
     );

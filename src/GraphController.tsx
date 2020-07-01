@@ -1,6 +1,6 @@
-import React, { useContext, useState, useRef, useEffect, ForwardRefExoticComponent, RefAttributes } from 'react';
+import React, { useContext, useState, useRef, useEffect } from 'react';
 import { GraphContext } from './Store/GraphContext';
-import { Block, NodeObject, Props } from './Class/Class';
+import { Block, NodeObject } from './Class/Class';
 import  Node  from './Node';
 
 const GraphController = () => {
@@ -25,25 +25,6 @@ const GraphController = () => {
             }
         }
     }, [graph]);
-
-
-    /*
-    useEffect(() => {
-        console.log("start modifie", start)
-    }, [start]);
-
-    useEffect(() => {
-        console.log("finish modifié", finish)
-    }, [finish]);
-
-    useEffect(() => {
-        console.log("refs modifié", refs)
-    }, [refs]); 
-
-
-    const getObjectOfRef = (ref) => {
-        return graph[ref.coord.x][ref.coord.y];
-    }*/
 
     const compared2Nodes = (node1: NodeObject, node2: NodeObject) =>{
         if (node1!.heuristique! < node2!.heuristique! ) {
