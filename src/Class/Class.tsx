@@ -15,9 +15,9 @@ export interface ContextLayout {
     graph : [NodeObject[]?],
     setGraph: (e: []) => void,
     start: Coord,
-    setstart: (e: Coord) => void,
+    setStart: (e: Coord) => void,
     finish: Coord,
-    setfinish: (e: Coord) => void,
+    setFinish: (e: Coord) => void,
     reset: () => void,
     block: string,
     setBlock: (e: string) => void
@@ -59,7 +59,7 @@ export class Coord {
 }
 
 export const Block = {
-    start:  "start" , 
-    finish: "finish",
+    START:  "start" , 
+    FINISH: "finish",
     WALL:    "wall"
 }

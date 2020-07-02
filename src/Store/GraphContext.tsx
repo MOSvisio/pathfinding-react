@@ -6,9 +6,9 @@ const contextInit : ContextLayout = {
     graph : [[]],
     setGraph: (e: []) => {},
     start: new Coord(-1,-1),
-    setstart: (e: Coord) => {},
+    setStart: (e: Coord) => {},
     finish: new Coord(0,0),
-    setfinish: (e: Coord) => {},
+    setFinish: (e: Coord) => {},
     reset: () => {},
     block: "",
     setBlock: (e: string) => {}
@@ -39,25 +39,25 @@ const GraphProvider: FunctionComponent<GraphProviderProps> = ({children}) => {
     }
 
     const [graph, setGraph] = useState(initGraph);
-    const [start, setstart] = useState(new Coord(-1,-1));
-    const [finish, setfinish] = useState(new Coord(-1,-1));
+    const [start, setStart] = useState(new Coord(-1,-1));
+    const [finish, setFinish] = useState(new Coord(-1,-1));
     const [block, setBlock] = useState("");
 
     // TODO: refs type
     const reset = () => {
         
         setGraph(initGraph);
-        setstart(new Coord(-1,-1));
-        setfinish(new Coord(-1,-1));
+        setStart(new Coord(-1,-1));
+        setFinish(new Coord(-1,-1));
     }
 
     const contextValue : ContextLayout = {
         graph: graph,
         setGraph: (e : []) => setGraph(e),
         start: start,
-        setstart: (e : Coord) => setstart(e),
+        setStart: (e : Coord) => setStart(e),
         finish: finish,
-        setfinish: (e : Coord) => setfinish(e),
+        setFinish: (e : Coord) => setFinish(e),
         reset: () => reset(),
         block: block,
         setBlock: (e : string) => setBlock(e)

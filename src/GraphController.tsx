@@ -84,7 +84,8 @@ const GraphController = () => {
         console.log(tab)
         for (const ref of tab) {
             await sleep(200)
-            refs.current![ref.coord!.x]![ref.coord!.y].setColor("green");
+            if (ref.coord!.x !== finish.x || ref.coord!.y !== finish.y)    
+                refs.current![ref.coord!.x]![ref.coord!.y].setColor("green");
         }
         setIsOver(true)
     }
@@ -146,8 +147,8 @@ const GraphController = () => {
     return (
         <div>
             <div>
-                <button disabled={!isOver} onClick={() => setBlockType(Block.start)}>Start</button>
-                <button disabled={!isOver} onClick={() => setBlockType(Block.finish)}>Finish</button>
+                <button disabled={!isOver} onClick={() => setBlockType(Block.START)}>Start</button>
+                <button disabled={!isOver} onClick={() => setBlockType(Block.FINISH)}>Finish</button>
                 <button disabled={!isOver} onClick={() => setBlockType(Block.WALL)}>Wall</button>
             </div>
             <div>

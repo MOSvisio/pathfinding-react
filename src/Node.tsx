@@ -18,7 +18,7 @@ export type NodeHandle = {
 }
 
 const Node = forwardRef<NodeHandle, Props>((props: Props, ref) => {
-    const {graph, start, setstart, finish, setfinish, block} = useContext(GraphContext);
+    const {graph, start, setStart, finish, setFinish, block} = useContext(GraphContext);
     const [coord, setCoord] = useState(new Coord(props.x, props.y));
     const [colorBg, setColorBg] = useState(props.color);
     const [isWall, setIsWall] = useState(false);
@@ -32,17 +32,17 @@ const Node = forwardRef<NodeHandle, Props>((props: Props, ref) => {
             setColor("white")
     }, [refs])*/
 
-    const setstartfinish = (e: React.MouseEvent) => {
+    const setStartfinish = (e: React.MouseEvent) => {
         console.log("clic", coord)
-        if (block === Block.start && start.x === -1)
+        if (block === Block.START && start.x === -1)
         {
-            setstart(new Coord(x, y));
+            setStart(new Coord(x, y));
             setColorBg("blue")
             console.log("set start");
         }
-        else if (block === Block.finish && finish.x === -1)
+        else if (block === Block.FINISH && finish.x === -1)
         {
-            setfinish(new Coord(x, y));
+            setFinish(new Coord(x, y));
             setColorBg("yellow");
             console.log("set finish");
         }
@@ -60,16 +60,17 @@ const Node = forwardRef<NodeHandle, Props>((props: Props, ref) => {
                 setColorBg("black");
             }
         }
-      }
+    }
 
 
     useImperativeHandle(ref, () => ({
 
-        coord,
+        coord: coord,
 
-        colorBg,
+        colorBg: colorBg,
 
         setColor: (color: string) => {
+            console.log(colorBg)
             if (colorBg !== "blue" && colorBg !== "yellow")
                 setColorBg(color)
         },
@@ -89,7 +90,7 @@ const Node = forwardRef<NodeHandle, Props>((props: Props, ref) => {
     }));
 
     return (
-        <td onMouseOver={(e) => onMouseEnterDo(e)} onClick={(e) => setstartfinish(e)} style={{ border: "1px solid #333", width: "30px", height: "30px", backgroundColor: colorBg}}>
+        <td onMouseOver={(e) => onMouseEnterDo(e)} onClick={(e) => setStartfinish(e)} style={{ border: "1px solid #333", width: "30px", height: "30px", backgroundColor: colorBg}}>
             {isWall ? "" : ""}
         </td>
     );
