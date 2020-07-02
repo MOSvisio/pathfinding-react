@@ -1,5 +1,4 @@
 import React, { createContext, useState, useRef, FunctionComponent, MutableRefObject } from 'react';
-import Node from '../Node';
 import { NodeObject, Coord, ContextLayout} from '../Class/Class'
 
 const contextInit : ContextLayout = {
