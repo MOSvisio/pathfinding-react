@@ -60,7 +60,7 @@ const Node = forwardRef<NodeHandle, Props>((props: Props, ref) => {
         }
         else {
             setWall()
-        }
+        } 
     }
 
     function onMouseEnterDo(e : React.MouseEvent){
