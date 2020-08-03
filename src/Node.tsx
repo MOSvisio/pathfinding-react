@@ -32,7 +32,19 @@ const Node = forwardRef<NodeHandle, Props>((props: Props, ref) => {
             setColor("white")
     }, [refs])*/
 
+    function setWall() {
+        if (block === Block.WALL) 
+        {
+            setIsWall(true)
+            const graphObj = graph[coord.x]![coord.y]
+            
+            graphObj!.isWall = true
+            setColorBg("black");
+        }
+    }
+
     const setStartfinish = (e: React.MouseEvent) => {
+        e.preventDefault();
         console.log("clic", coord)
         if (block === Block.START && start.x === -1)
         {
@@ -46,22 +58,17 @@ const Node = forwardRef<NodeHandle, Props>((props: Props, ref) => {
             setColorBg("yellow");
             console.log("set finish");
         }
+        else {
+            setWall()
+        }
     }
 
     function onMouseEnterDo(e : React.MouseEvent){
         e.preventDefault();
         if(e.buttons===1){//code for left click}
-            if (block === Block.WALL) 
-            {
-                setIsWall(true)
-                const graphObj = graph[coord.x]![coord.y]
-                
-                graphObj!.isWall = true
-                setColorBg("black");
-            }
+            setWall()
         }
     }
-
 
     useImperativeHandle(ref, () => ({
 
@@ -90,7 +97,7 @@ const Node = forwardRef<NodeHandle, Props>((props: Props, ref) => {
     }));
 
     return (
-        <td onMouseOver={(e) => onMouseEnterDo(e)} onClick={(e) => setStartfinish(e)} style={{ border: "1px solid #333", width: "30px", height: "30px", backgroundColor: colorBg}}>
+        <td onMouseOver={(e) => onMouseEnterDo(e)} onMouseDown={(e) => setStartfinish(e)} style={{ border: "1px solid #333", width: "30px", height: "30px", backgroundColor: colorBg}}>
             {isWall ? "" : ""}
         </td>
     );
