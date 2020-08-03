@@ -72,7 +72,7 @@ const Node = forwardRef<NodeHandle, Props>((props: Props, ref) => {
 
     useImperativeHandle(ref, () => ({
 
-        coord: coord,
+        coord: coord, 
 
         colorBg: colorBg,
 
