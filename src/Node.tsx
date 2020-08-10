@@ -4,17 +4,17 @@ import { Block, Coord, Props } from './Class/Class';
 
 export type NodeHandle = {
 
-        coord: Coord,
+    coord: Coord,
 
-        colorBg: string,
+    colorBg: string,
 
-        setColor: (color: string) => void,
-        
-        resetColor: () => void,
+    setColor: (color: string) => void,
+    
+    resetColor: () => void,
 
-        setIsWall: (isWall: boolean) =>void,
+    setIsWall: (isWall: boolean) =>void,
 
-        setCout: (cout: number) => void
+    setCout: (cout: number) => void
 }
 
 const Node = forwardRef<NodeHandle, Props>((props: Props, ref) => {
